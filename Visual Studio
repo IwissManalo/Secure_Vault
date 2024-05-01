@@ -1,0 +1,187 @@
+// VISUAL STUDIO
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Manalo_GUI2_Invention
+{
+    public partial class Form1 : Form
+    {
+        private String light;
+        public Form1()
+        {
+            InitializeComponent();
+            premium.Visible = false;
+            serialPort1.Open();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            lockerType.Items.Add("Basic");
+            lockerType.Items.Add("Standard");
+            lockerType.Items.Add("Premium");
+            lockerType.SelectedIndex = 0;
+        }
+
+        private void lockerType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (lockerType.SelectedItem.ToString() == "Basic")
+            {
+                basic.Visible = true;
+                standard.Visible = false;
+                premium.Visible = false;
+            }
+            else if (lockerType.SelectedItem.ToString() == "Standard")
+            {
+                basic.Visible = false;
+                standard.Visible = true;
+                premium.Visible = false;
+            }
+            else if (lockerType.SelectedItem.ToString() == "Premium")
+            {
+                basic.Visible = false;
+                standard.Visible = false;
+                premium.Visible = true;
+                adjustLight.Visible = false;
+                setBrightness.Visible = false;
+            }
+            else
+            {
+                basic.Visible = false;
+                standard.Visible = false;
+                premium.Visible = false;
+            }
+        }
+
+        // LOCKER TYPES
+        private void basic_Enter(object sender, EventArgs e)
+        {
+
+        }
+        private void standard_Enter(object sender, EventArgs e)
+        {
+
+        }
+        private void premium_Enter(object sender, EventArgs e)
+        {
+            adjustLight.Visible = false;
+        }
+
+        // BASIC FEATURES
+        private void basicStatus_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void basicLock_Click(object sender, EventArgs e)
+        {
+            basicStatus.Text = "Locked Success";
+            serialPort1.WriteLine("LOCK");
+        }
+
+        private void basicUnlock_Click(object sender, EventArgs e)
+        {
+            basicStatus.Text = "Unlocked Success";
+            serialPort1.WriteLine("UNLOCK");
+        }
+
+        // PREMIUM FEATURES
+        private void enableLight_CheckedChanged(object sender, EventArgs e)
+        {
+
+            if (enableLight.Checked)
+            {
+                premiumStatus.Text = "You may now adjust light";
+                adjustLight.Visible = true;
+                setBrightness.Visible = true;
+            }
+            else
+            {
+                premiumStatus.Text = "Adjust light not available";
+                adjustLight.Visible = false;
+                setBrightness.Visible = false;
+            }
+        }
+
+        private void alarmOn_CheckedChanged(object sender, EventArgs e)
+        {
+            premiumStatus.Text = "Alarm turned On";
+            serialPort1.WriteLine("ALARM_ON");
+        }
+
+        private void alarmOff_CheckedChanged(object sender, EventArgs e)
+        {
+            premiumStatus.Text = "Alarm turned Off";
+            serialPort1.WriteLine("ALARM_OFF");
+        }
+
+        private void adjustLight_Scroll(object sender, EventArgs e)
+        {
+            light = "L" + adjustLight.Value;
+        }
+
+        private void setBrightness_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(light))
+            {
+                light = "OFF";
+            }
+            serialPort1.Write(light);
+        }
+
+        private void premiumLock_Click(object sender, EventArgs e)
+        {
+            premiumStatus.Text = "Locked Success";
+            serialPort1.WriteLine("LOCK");
+        }
+
+        private void premiumUnlock_Click(object sender, EventArgs e)
+        {
+            premiumStatus.Text = "Unlocked Success";
+            serialPort1.WriteLine("UNLOCK");
+        }
+
+        private void premiumStatus_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        // STANDARD FEATURES
+        private void standardStatus_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void standardLock_Click(object sender, EventArgs e)
+        {
+            standardStatus.Text = "Locked Success";
+            serialPort1.WriteLine("LOCK");
+        }
+
+        private void standardUnlock_Click(object sender, EventArgs e)
+        {
+            standardStatus.Text = "Unlocked Success";
+            serialPort1.WriteLine("UNLOCK");
+        }
+
+        private void standardAlarmOff_CheckedChanged(object sender, EventArgs e)
+        {
+            standardStatus.Text = "Alarm turned Off";
+            serialPort1.WriteLine("ALARM_OFF");
+        }
+
+        private void standardAlarmOn_CheckedChanged(object sender, EventArgs e)
+        {
+            standardStatus.Text = "Alarm turned On";
+            serialPort1.WriteLine("ALARM_ON");
+        }
+
+    }
+}
