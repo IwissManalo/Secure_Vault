@@ -1,0 +1,66 @@
+// ARDUINO SKETCH
+
+#include <Servo.h>
+
+Servo lockerServo;
+
+int buzzerPin = 3;
+int lightPin = 6;
+int brightness = 0;
+
+void setup() {
+  Serial.begin(9600);
+  lockerServo.attach(9);
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(lightPin, OUTPUT);
+}
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    executeCommand(command);
+  }
+}
+
+void executeCommand(String command) {
+  if (command == "LOCK") {
+    Lock(lockerServo);
+  } else if (command == "UNLOCK") {
+    Unlock(lockerServo);
+  } else if (command == "ALARM_ON") {
+    turnOnAlarm();
+  } else if (command == "ALARM_OFF") {
+    turnOffAlarm();
+  } else if (command == "LIGHT") {
+    enableLight();
+  } else if (command.startsWith("L")) {
+    int brightness = command.substring(1).toInt();
+    analogWrite(lightPin, brightness);
+  }
+}
+
+void Lock(Servo servo) {
+  servo.write(90); // Lock
+}
+
+void Unlock(Servo servo) {
+  servo.write(180); // Unlock
+}
+
+void turnOnAlarm() {
+  tone(buzzerPin, 1000);
+}
+
+void turnOffAlarm() {
+  noTone(buzzerPin);
+}
+
+void enableLight() {
+  analogWrite(lightPin, brightness);
+}
+
+void adjustLight(int value) {
+  brightness = value;
+  analogWrite(lightPin, brightness);
+}
+ 
