@@ -1,0 +1,83 @@
+#include <Servo.h>
+
+
+Servo lockerServo1;
+Servo lockerServo2;
+int buzzerPin = 3;
+int lightPin1 = 6;
+int lightPin2 = 7;
+
+
+
+
+void setup() {
+  Serial.begin(9600);
+  lockerServo1.attach(9);
+  lockerServo2.attach(10);
+  pinMode(buzzerPin, OUTPUT);
+  pinMode(lightPin1, OUTPUT);
+  pinMode(lightPin2, OUTPUT);
+}
+
+
+void loop() {
+  if (Serial.available() > 0) {
+    String command = Serial.readStringUntil('\n');
+    executeCommand(command);
+  }
+}
+
+
+void executeCommand(String command) {
+ 
+  if (command == "LOCKNORMAL") {
+    enableLightRed();
+    Lock(lockerServo1);
+    Lock(lockerServo2);
+   
+  } else if (command == "LOCKSILENT") {
+    Lock(lockerServo1);
+    Lock(lockerServo2);
+
+
+  } else if (command == "WRONGPASSWORD") {
+     enableLightRed();
+   
+  } else if (command == "SUCCESSPASSWORD") {
+    enableLightGreen();
+   
+    unlock(lockerServo1);
+    unlock(lockerServo2);
+  }
+}
+
+
+//methods
+
+
+void Lock(Servo servo) {
+  servo.write(90); // Lock
+}
+
+
+void unlock(Servo servo) {
+  servo.write(180); // Unlock
+}
+
+
+void enableLightGreen() {
+  tone(buzzerPin, 1000);
+  digitalWrite(lightPin1, HIGH);
+  delay(1000);
+  digitalWrite(lightPin1, LOW);
+  noTone(buzzerPin);
+}
+
+
+void enableLightRed() {
+  tone(buzzerPin, 1000);
+  digitalWrite(lightPin2, HIGH);
+  delay(1000);
+  digitalWrite(lightPin2, LOW);
+  noTone(buzzerPin);
+}
