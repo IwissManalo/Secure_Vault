@@ -1,0 +1,174 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.IO.Ports;
+using System.Linq;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ToolTip;
+
+namespace Robotics_Finals
+{
+    public partial class Form1 : Form
+    {
+        private bool isPasswordConfirmed = false;
+        private string registeredPassword;
+
+        public Form1()
+        {
+            InitializeComponent();
+            serialPort1.Open();
+        }
+
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            setting_up_Locker.Visible = false;
+            use_locker.Visible = false;
+            to_locker.Visible = false;
+            features.SelectedIndex = 0;
+
+        }
+
+        private void home_title_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void deets_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void logo_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        //Directs user to set up locker
+        private void set_up_Click(object sender, EventArgs e)
+        {
+            home_title.Visible = false;
+            deets.Visible = false;
+            logo.Visible = false;
+            setting_up_Locker.Visible = true;
+            use_locker.Visible = false;
+        }
+
+        private void setting_up_Locker_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        //Back Button
+        private void back_Click(object sender, EventArgs e)
+        {
+            home_title.Visible = true;
+            deets.Visible = true;
+            logo.Visible = true;
+            setting_up_Locker.Visible = false;
+
+            if (!isPasswordConfirmed)
+            {
+                to_locker.Visible = false;
+            }
+        }
+
+        //Set Password
+        private void password_field_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void confirm_password_Click(object sender, EventArgs e)
+        {
+            DialogResult result = MessageBox.Show("Password set successfully!", "Confirmation", MessageBoxButtons.OKCancel);
+            registeredPassword = password_field.Text;
+            if (result == DialogResult.OK)
+            {
+                to_locker.Visible = true;
+                isPasswordConfirmed = true;
+            }
+
+        }
+
+        private void to_locker_Click(object sender, EventArgs e)
+        {
+            use_locker.Visible = true;
+            to_locker.Visible = false;
+        }
+
+        // USE LOCKER
+        private void use_locker_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void home_Click(object sender, EventArgs e)
+        {
+            home_title.Visible = true;
+            deets.Visible = true;
+            logo.Visible = true;
+            setting_up_Locker.Visible = false;
+            use_locker.Visible = true;
+        }
+
+        private void enter_password_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        //Checks the password if it matches the set password
+        private void confirm_Click(object sender, EventArgs e)
+        {
+            if (enter_password.Text == registeredPassword)
+            {
+                serialPort1.WriteLine("SUCCESSPASSWORD");
+                MessageBox.Show("UNLOCKED LOCKER");
+                Lock.Visible = true;
+            }
+            else
+            {
+                serialPort1.WriteLine("WRONGPASSWORD");
+                MessageBox.Show("Wrong Password, Try Again");
+            }
+        }
+
+        //Locks the locker ++alarm, light will turn on
+        private void lock_locker_Click(object sender, EventArgs e)
+        {
+
+            if (features.SelectedItem.ToString() == "Normal Lock")
+            {
+                serialPort1.WriteLine("LOCKNORMAL");
+                MessageBox.Show("Locked in Normal Mode");
+                Lock.Visible = false;
+            }
+            else if (features.SelectedItem.ToString() == "Silent Lock")
+            {
+                serialPort1.WriteLine("LOCKSILENT");
+                MessageBox.Show("Locked in Silent Mode");
+                Lock.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("Select a Mode");
+            }
+
+        }
+
+        private void Lock_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void features_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+    }
+}
