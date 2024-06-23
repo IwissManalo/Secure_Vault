@@ -5,5 +5,5 @@
 <img src="Screenshot (276).png" width="300">
 <img src="Screenshot (277).png" width="300">
 
-© 2024 Irish Manalo - V1
+© 2024 Irish Manalo - V1 <br>
 © 2024 Irish Manalo, Ralph Vicente, and Jhonross Lauzon - V2
